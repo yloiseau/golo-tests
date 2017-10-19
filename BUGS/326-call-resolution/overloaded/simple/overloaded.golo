@@ -3,22 +3,34 @@ module TestOverloaded
 
 import test
 
-local function test = |v, e| {
-  if not v: startsWith(e) {
-    println("Should be %s but is %s": format(e, v))
+local function test = |f, e| {
+  try {
+    let v = f()
+    if not v: startsWith(e) {
+      println("FAILED: should be %s but is %s": format(e, v))
+    } else {
+      println("OK: " + e)
+    }
+  } catch (e) {
+    println("ERROR: " + e)
   }
 }
 
 function main = |args| {
   let t = OverloadedMethod()
+  let sup = |s| -> |v| -> s + v
 
-  test(t: foo("a"), "String")
-  
-  # should be Integer and not Number since we want to use the most specific
-  # method
-  # test(t: foo(1), "Integer")
-  
-  test(t: foo(2.5), "Number")
-  
-  test(t: foo(Wrapper.of("w")), "Wrapper")
+  ## These are always OK...
+  # test(-> t: foo("a"), "String")
+  # test(-> t: foo(Wrapper.of("w")), "Wrapper")
+  # test(-> t: foo(OverloadedMethod.fi("s")), "FunctionalInterface")
+
+  test(-> t: foo(2.5), "Number")
+  # this one is influenced by the presence of the previous one!
+  test(-> t: foo(1), "Integer")
+
+  # May dispatch on any of the 3 possible methods:
+  test(-> t: foo(|v| -> "a" + v), "FunctionReference")
+  test(-> t: foo(sup("b")), "FunctionReference")
+
 }
