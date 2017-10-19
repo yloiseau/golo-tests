@@ -31,6 +31,8 @@ function main = |args| {
 
   # May dispatch on any of the 3 possible methods:
   test(-> t: foo(|v| -> "a" + v), "FunctionReference")
+  # May cause an error (not a direct method handle) if used as a FI 
+  # (see https://github.com/eclipse/golo-lang/issues/277)
   test(-> t: foo(sup("b")), "FunctionReference")
 
 }
