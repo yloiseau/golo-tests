@@ -97,7 +97,7 @@ function test_stack = {
 function test_simple_value = {
   let a = Annotate.class: getDeclaredMethod("withInt"): getAnnotation(WithIntArg.class)
   require(a isnt null, "No WithInt annotation")
-  require(a: val() == 42, "Bad withint value")
+  require(a: val() == 42, "Bad withint value (%s)": format(a: val()))
 }
 
 function main = |args| {

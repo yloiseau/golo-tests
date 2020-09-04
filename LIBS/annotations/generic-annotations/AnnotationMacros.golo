@@ -24,5 +24,9 @@ import Tool
 &namedAnnotationWrapper("OnMultiple", annotations.OnAll.class)
 
 macro WithIntArg = |val, elts...| {
-  
+  return Tool.annotateElement(match {
+      when isArray(elts) and elts: size() == 1 then elts: get(0)
+      when isArray(elts) then gololang.ir.ToplevelElements.of(elts)
+      otherwise elts
+    }, annotations.WithIntArg.class, map[["val", val: value()]])
 }

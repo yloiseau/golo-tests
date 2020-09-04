@@ -24,12 +24,15 @@ macro namedAnnotationWrapper = |name, annotationClassReference| -> generateWrapp
 
 local function generateWrapper = |macroName, annotationClassReference| -> `macro(macroName)
   : withParameters("elts"): varargs(): body(&quote {
-    return Tool.annotateElement(match {
-      when isArray($elts) and $elts: size() == 1 then $elts: get(0)
-      when isArray($elts) then gololang.ir.ToplevelElements.of($elts)
-      otherwise $elts
-    }, $(annotationClassReference), null)
+    return Tool.annotateElements($elts, $(annotationClassReference), null)
   })
+
+function annotateElements = |elts, annotationClass, args| -> Tool.annotateElement(
+  match {
+      when isArray(elts) and elts: size() == 1 then elts: get(0)
+      when isArray(elts) then gololang.ir.ToplevelElements.of(elts)
+      otherwise elts
+  }, annotationClass, args)
 
 function annotateElement = |elt, annotationClass, args| {
   if elt oftype gololang.ir.ToplevelElements.class {
