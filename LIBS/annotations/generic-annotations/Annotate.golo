@@ -86,7 +86,7 @@ function withInt = -> null
   function withIntB = -> null
 }
 
-@WithNamedArg(a=42, b="hello")
+@WithNamedArg(a=42, b="hello", c=java.lang.String.class)
 function intStringA = -> null
 
 @WithNamedArg(a=42)

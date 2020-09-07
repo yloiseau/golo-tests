@@ -112,20 +112,20 @@ function test_simple_value_multi = {
 function test_args = {
   let a = Annotate.class: getDeclaredMethod("intStringA"): getAnnotation(WithNamedArg.class)
   require(a isnt null, "No annotation")
-  require(a: a() == 42 and a: b() == "hello", "bad values")
+  require(a: a() == 42 and a: b() == "hello" and a: c() == String.class, "bad values")
 }
 
 function test_args_default = {
   let a = Annotate.class: getDeclaredMethod("intStringB"): getAnnotation(WithNamedArg.class)
   require(a isnt null, "No annotation")
-  require(a: a() == 42 and a: b() == "answer", "bad values")
+  require(a: a() == 42 and a: b() == "answer"  and a: c() == Float.class, "bad values")
 }
 
 function test_args_multi = {
   foreach f in array["intStringC1", "intStringC2"] {
     let a = Annotate.class: getDeclaredMethod(f): getAnnotation(WithNamedArg.class)
     require(a isnt null, "No annotation")
-    require(a: a() == 42 and a: b() == "hello", "bad values")
+    require(a: a() == 42 and a: b() == "hello" and a: c() == Float.class, "bad values")
   }
 }
 

@@ -79,7 +79,7 @@ function extractAnnotationFields =|annotationClass| {
 
 function getAnnotationValue = |macroArgument| -> match {
   when macroArgument oftype gololang.ir.ConstantStatement.class and macroArgument: value() oftype
-  gololang.ir.ClassReference.class then macroArgument: value(): dereference()
+    gololang.ir.ClassReference.class then macroArgument: value(): dereference()
   when macroArgument oftype gololang.ir.ConstantStatement.class then macroArgument: value()
   otherwise macroArgument
 }

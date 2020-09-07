@@ -6,5 +6,5 @@ import java.lang.annotation.*;
 public @interface WithNamedArg {
   int a();
   String b() default "answer";
-  // Class<?> c() default String.class;
+  Class<?> c() default Float.class;
 }

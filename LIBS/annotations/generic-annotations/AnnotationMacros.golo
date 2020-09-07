@@ -35,20 +35,14 @@ macro WithIntArg = |val, elts...| {
 macro WithNamedArg = |args...| {
   let p, n = gololang.macros.Utils.parseArguments(args)
   let annotationFields = map[]
-  foreach name, type, hasDefault in array[["a", Integer.class, false], ["b", String.class, true]] {
+  foreach name, type, hasDefault in extractAnnotationFields(annotations.WithNamedArg.class) {
     let value = Tool.getAnnotationValue(n: get(name))
     require(value oftype type or (hasDefault and value is null), 
-        "Bad value")
-    # for `%s`. %s expected, got a %s (%s).": format(
-    #         name, 
-    #         type: getName(),
-    #         value?: getClass()?: getName() orIfNull "null value",
-    #         value))
+        "Bad value for `%s`. Got %s but need a %s": format(name, value, type: name()))
     if (value isnt null) {
       annotationFields: put(name, value)
     }
   }
-  println("## " + annotationFields)
   return Tool.annotateElements(p,
             annotations.WithNamedArg.class,
             annotationFields)
