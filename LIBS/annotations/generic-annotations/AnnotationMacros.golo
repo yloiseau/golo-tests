@@ -24,9 +24,36 @@ import Tool
 &namedAnnotationWrapper("OnMultiple", annotations.OnAll.class)
 
 macro WithIntArg = |val, elts...| {
-  return Tool.annotateElement(match {
-      when isArray(elts) and elts: size() == 1 then elts: get(0)
-      when isArray(elts) then gololang.ir.ToplevelElements.of(elts)
-      otherwise elts
-    }, annotations.WithIntArg.class, map[["val", val: value()]])
+  if not (val: value() oftype java.lang.Integer.class) {
+    throw java.lang.annotation.AnnotationTypeMiscmatchException()
+  }
+  return Tool.annotateElements(elts,
+            annotations.WithIntArg.class,
+            map[["val", val: value()]])
+}
+
+macro WithNamedArg = |args...| {
+  let p, n = gololang.macros.Utils.parseArguments(args)
+  let annotationFields = map[]
+  foreach name, type, hasDefault in array[["a", Integer.class, false], ["b", String.class, true]] {
+    let value = Tool.getAnnotationValue(n: get(name))
+    require(value oftype type or (hasDefault and value is null), 
+        "Bad value")
+    # for `%s`. %s expected, got a %s (%s).": format(
+    #         name, 
+    #         type: getName(),
+    #         value?: getClass()?: getName() orIfNull "null value",
+    #         value))
+    if (value isnt null) {
+      annotationFields: put(name, value)
+    }
+  }
+  println("## " + annotationFields)
+  return Tool.annotateElements(p,
+            annotations.WithNamedArg.class,
+            annotationFields)
+}
+
+macro test = |arg| {
+  println(arg: getClass())
 }

@@ -79,4 +79,21 @@ function stack4 = -> null
 function stack5 = -> null
 
 @WithIntArg(42)
-function withInt = -> 42
+function withInt = -> null
+
+&WithIntArg(12) {
+  function withIntA = -> null
+  function withIntB = -> null
+}
+
+@WithNamedArg(a=42, b="hello")
+function intStringA = -> null
+
+@WithNamedArg(a=42)
+function intStringB = -> null
+
+&WithNamedArg(a=42, b="hello") {
+function intStringC1 = -> null
+function intStringC2 = -> null
+}
+

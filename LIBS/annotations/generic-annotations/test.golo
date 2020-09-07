@@ -100,6 +100,35 @@ function test_simple_value = {
   require(a: val() == 42, "Bad withint value (%s)": format(a: val()))
 }
 
+function test_simple_value_multi = {
+  let a = Annotate.class: getDeclaredMethod("withIntA"): getAnnotation(WithIntArg.class)
+  require(a isnt null, "No WithInt annotation")
+  require(a: val() == 12, "Bad value for %s (%s)": format("withIntA", a: val()))
+  let b = Annotate.class: getDeclaredMethod("withIntB"): getAnnotation(WithIntArg.class)
+  require(b isnt null, "No WithInt annotation")
+  require(b: val() == 12, "Bad value for %s (%s)": format("withIntB", b: val()))
+}
+
+function test_args = {
+  let a = Annotate.class: getDeclaredMethod("intStringA"): getAnnotation(WithNamedArg.class)
+  require(a isnt null, "No annotation")
+  require(a: a() == 42 and a: b() == "hello", "bad values")
+}
+
+function test_args_default = {
+  let a = Annotate.class: getDeclaredMethod("intStringB"): getAnnotation(WithNamedArg.class)
+  require(a isnt null, "No annotation")
+  require(a: a() == 42 and a: b() == "answer", "bad values")
+}
+
+function test_args_multi = {
+  foreach f in array["intStringC1", "intStringC2"] {
+    let a = Annotate.class: getDeclaredMethod(f): getAnnotation(WithNamedArg.class)
+    require(a isnt null, "No annotation")
+    require(a: a() == 42 and a: b() == "hello", "bad values")
+  }
+}
+
 function main = |args| {
   test_on_method()
   test_on_module()
@@ -111,5 +140,9 @@ function main = |args| {
   test_on_all()
   test_stack()
   test_simple_value()
+  test_simple_value_multi()
+  test_args()
+  test_args_default()
+  test_args_multi()
   println("ok")
 }

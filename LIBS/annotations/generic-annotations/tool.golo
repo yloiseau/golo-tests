@@ -34,7 +34,7 @@ function annotateElements = |elts, annotationClass, args| -> Tool.annotateElemen
       otherwise elts
   }, annotationClass, args)
 
-function annotateElement = |elt, annotationClass, args| {
+local function annotateElement = |elt, annotationClass, args| {
   if elt oftype gololang.ir.ToplevelElements.class {
     foreach e in elt {
       annotateElement(e, annotationClass, args)
@@ -60,7 +60,6 @@ function isApplicableTo = |annotationClass, target| {
   return annotationTargets is null 
          or (targetType isnt null
              and java.util.Arrays.asList(annotationTargets): contains(targetType))
-
 }
 
 function checkApplicableTo = |annotationClass, target| {
@@ -68,3 +67,19 @@ function checkApplicableTo = |annotationClass, target| {
           "Annotation %s not applicable on a %s": format(annotationClass: getName(), target: getClass(): getName()))
 }
 
+function extractAnnotationFields =|annotationClass| {
+  return array[
+    [
+      meth: getName(), 
+      org.eclipse.golo.runtime.TypeMatching.boxed(meth: getReturnType()),
+      meth: getDefaultValue() isnt null
+    ] foreach meth in annotationClass: getDeclaredMethods()
+  ]
+}
+
+function getAnnotationValue = |macroArgument| -> match {
+  when macroArgument oftype gololang.ir.ConstantStatement.class and macroArgument: value() oftype
+  gololang.ir.ClassReference.class then macroArgument: value(): dereference()
+  when macroArgument oftype gololang.ir.ConstantStatement.class then macroArgument: value()
+  otherwise macroArgument
+}

@@ -1,10 +1,10 @@
 
 .PHONY: test
-test: clean
-	@javac annotations/*.java
-	@golo compile tool.golo 
-	@golo compile AnnotationMacros.golo
-	@golo compile Annotate.golo
+test:
+	javac annotations/*.java
+	golo compile tool.golo 
+	golo compile AnnotationMacros.golo
+	golo compile Annotate.golo
 	@echo "golo test"
 	-@golo golo --files test.golo
 	@echo "compile errors"
