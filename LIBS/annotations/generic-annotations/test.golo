@@ -109,23 +109,80 @@ function test_simple_value_multi = {
   require(b: val() == 12, "Bad value for %s (%s)": format("withIntB", b: val()))
 }
 
+function test_simple_value_default = {
+  foreach f in array["withIntDefault", "withIntDefaultA", "withIntDefaultB"] {
+    let a = Annotate.class: getDeclaredMethod(f): getAnnotation(WithIntArg.class)
+    require(a isnt null, "No WithInt annotation")
+    require(a: val() == 1, "Bad withint value (%s)": format(a: val()))
+  }
+}
+
 function test_args = {
-  let a = Annotate.class: getDeclaredMethod("intStringA"): getAnnotation(WithNamedArg.class)
+  let a = Annotate.class: getDeclaredMethod("namedA"): getAnnotation(WithNamedArg.class)
   require(a isnt null, "No annotation")
   require(a: a() == 42 and a: b() == "hello" and a: c() == String.class, "bad values")
 }
 
 function test_args_default = {
-  let a = Annotate.class: getDeclaredMethod("intStringB"): getAnnotation(WithNamedArg.class)
+  let a = Annotate.class: getDeclaredMethod("namedB"): getAnnotation(WithNamedArg.class)
   require(a isnt null, "No annotation")
   require(a: a() == 42 and a: b() == "answer"  and a: c() == Float.class, "bad values")
 }
 
 function test_args_multi = {
-  foreach f in array["intStringC1", "intStringC2"] {
+  foreach f in array["namedC1", "namedC2"] {
     let a = Annotate.class: getDeclaredMethod(f): getAnnotation(WithNamedArg.class)
     require(a isnt null, "No annotation")
     require(a: a() == 42 and a: b() == "hello" and a: c() == Float.class, "bad values")
+  }
+}
+
+function test_array_args = {
+  let a = Annotate.class: getDeclaredMethod("stringArray"): getAnnotation(WithArrayArg.class)
+  require(a isnt null, "No annotation")
+  require(isArray(a: strings()), "Value is not an array")
+  require(a: strings():equals(array["a", "b", "c"]), "bad values: %s": format(java.util.Arrays.toString(a: strings())))
+}
+
+function test_enum_args = {
+  foreach name, value in array[["enum", annotations.Values.FIRST()],
+                               ["enumA", annotations.Values.OTHER()],
+                               ["enumB", annotations.Values.OTHER()]] {
+    let a = Annotate.class: getDeclaredMethod(name): getAnnotation(WithEnumArg.class)
+    require(a isnt null, "no annotation")
+    require(a: val() == value, "bad value")
+  }
+}
+
+function test_complex = {
+  let get = |fn| {
+    let a = Annotate.class: getDeclaredMethod(fn): getAnnotation(Complex.class)
+    require(a isnt null, "no annotation")
+    return a
+  }
+
+  let def = array[annotations.Values.FIRST(), annotations.Values.OTHER()]
+
+  var a = get("complexA")
+  require(a: vals(): equals(def) and a: cls(): equals(array[java.lang.String.class, java.lang.Integer.class]), "bad values")
+
+  a = get("complexB")
+  require(a: vals(): equals(array[annotations.Values.OTHER()]) 
+      and a: cls(): equals(array[java.lang.String.class]),
+    "Bad values")
+
+  foreach n in array["complexC", "complexD"] {
+    a = get(n)
+    require(a: vals(): equals(def) 
+        and a: cls(): equals(array[java.lang.String.class, java.lang.Integer.class]),
+      "Bad values")
+  }
+
+  foreach n in array["complexE", "complexF"] {
+    a = get(n)
+    require(a: vals(): equals(array[annotations.Values.OTHER(), annotations.Values.FIRST(), annotations.Values.OTHER()]) 
+        and a: cls(): equals(array[java.lang.String.class, java.lang.Integer.class]),
+      "Bad values")
   }
 }
 
@@ -140,9 +197,13 @@ function main = |args| {
   test_on_all()
   test_stack()
   test_simple_value()
+  test_simple_value_default()
   test_simple_value_multi()
   test_args()
   test_args_default()
   test_args_multi()
+  test_array_args()
+  test_enum_args()
+  test_complex()
   println("ok")
 }

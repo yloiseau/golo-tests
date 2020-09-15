@@ -6,6 +6,8 @@ module Test321
 import plop
 
 function main = |args| {
-  require(Foo.polymorphic() == "Foo::polymorphic", "err Foo")
-  require(Bar.polymorphic(42) == "Bar::polymorphic", "err Bar")
+  let f = Foo.polymorphic()
+  let b = Bar.polymorphic(42)
+  require(f == "Foo::polymorphic", "err Foo: " + f)
+  require(b == "Bar::polymorphic", "err Bar: " + b)
 }

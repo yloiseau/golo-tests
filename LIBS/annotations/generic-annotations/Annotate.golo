@@ -86,14 +86,50 @@ function withInt = -> null
   function withIntB = -> null
 }
 
-@WithNamedArg(a=42, b="hello", c=java.lang.String.class)
-function intStringA = -> null
+@WithIntArg
+function withIntDefault = -> null
 
-@WithNamedArg(a=42)
-function intStringB = -> null
-
-&WithNamedArg(a=42, b="hello") {
-function intStringC1 = -> null
-function intStringC2 = -> null
+&WithIntArg {
+function withIntDefaultA = -> null
+function withIntDefaultB = -> null
 }
 
+@WithNamedArg(a=42, b="hello", c=java.lang.String.class)
+function namedA = -> null
+
+@WithNamedArg(a=42)
+function namedB = -> null
+
+&WithNamedArg(a=42, b="hello") {
+function namedC1 = -> null
+function namedC2 = -> null
+}
+
+@WithArrayArg(["a", "b", "c"])
+function stringArray = -> null
+
+
+@WithEnumArg(annotations.Values.FIRST())
+function enum = -> null
+
+&WithEnumArg(annotations.Values.OTHER()) {
+function enumA = -> null
+function enumB = -> null
+}
+
+@Complex(cls=[java.lang.String.class, java.lang.Integer.class])
+function complexA = -> null
+
+@Complex(cls=[java.lang.String.class], vals=array[annotations.Values.OTHER()])
+function complexB= -> null
+
+&Complex(cls=[java.lang.String.class, java.lang.Integer.class]) {
+function complexC = -> null
+function complexD = -> null
+}
+
+&Complex(cls=[java.lang.String.class, java.lang.Integer.class], vals=[annotations.Values.OTHER(),
+annotations.Values.FIRST(), annotations.Values.OTHER()]) {
+function complexE = -> null
+function complexF = -> null
+}
