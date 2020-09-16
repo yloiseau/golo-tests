@@ -1,7 +1,6 @@
-module Tool
+module gololang.meta.Annotations
 
 import gololang.ir.DSL
-import gololang.ir.Quote
 
 &use("gololang.macros.Utils")
 

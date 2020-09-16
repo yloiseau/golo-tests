@@ -1,4 +1,4 @@
-package annotations;
+package golo.test.annotations;
 
 import java.lang.annotation.*;
 

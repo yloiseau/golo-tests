@@ -1,7 +1,7 @@
 
 module NotOnMethod
 
-&use("AnnotationMacros")
+&use("golo.test.AnnotationMacros")
 
 @OnMethod
 struct Foo = {x}

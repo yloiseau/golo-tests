@@ -1,4 +1,4 @@
-package annotations;
+package golo.test.annotations;
 
 public enum Values {
   FIRST,

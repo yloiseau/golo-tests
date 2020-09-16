@@ -1,6 +1,6 @@
 module NotOnType
 
-&use("AnnotationMacros")
+&use("golo.test.AnnotationMacros")
 
 @OnClass
 function foo = -> null

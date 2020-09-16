@@ -1,8 +1,8 @@
 
 @OnClass
-module Annotate
+module golo.test.Annotate
 
-&use("AnnotationMacros")
+&use("golo.test.AnnotationMacros")
 
 @OnMethod
 function plop = -> null
@@ -109,10 +109,10 @@ function namedC2 = -> null
 function stringArray = -> null
 
 
-@WithEnumArg(annotations.Values.FIRST())
+@WithEnumArg(golo.test.annotations.Values.FIRST())
 function enum = -> null
 
-&WithEnumArg(annotations.Values.OTHER()) {
+&WithEnumArg(golo.test.annotations.Values.OTHER()) {
 function enumA = -> null
 function enumB = -> null
 }
@@ -120,7 +120,7 @@ function enumB = -> null
 @Complex(cls=[java.lang.String.class, java.lang.Integer.class])
 function complexA = -> null
 
-@Complex(cls=[java.lang.String.class], vals=array[annotations.Values.OTHER()])
+@Complex(cls=[java.lang.String.class], vals=array[golo.test.annotations.Values.OTHER()])
 function complexB= -> null
 
 &Complex(cls=[java.lang.String.class, java.lang.Integer.class]) {
@@ -128,8 +128,8 @@ function complexC = -> null
 function complexD = -> null
 }
 
-&Complex(cls=[java.lang.String.class, java.lang.Integer.class], vals=[annotations.Values.OTHER(),
-annotations.Values.FIRST(), annotations.Values.OTHER()]) {
+&Complex(cls=[java.lang.String.class, java.lang.Integer.class], vals=[golo.test.annotations.Values.OTHER(),
+golo.test.annotations.Values.FIRST(), golo.test.annotations.Values.OTHER()]) {
 function complexE = -> null
 function complexF = -> null
 }
