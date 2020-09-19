@@ -1,20 +1,5 @@
 
 
-types: les énumérations, les annotations, le type Class ou tableau de ceux-ci
-
-valeur par default
-
-@Target({ElementType.METHOD, ElementType.CONSTRUCTOR })
-public @interface MonAnnotation {
-  public enum Niveau {DEBUTANT, CONFIRME, EXPERT} ;
-  String arg1() default "";
-  String[] arg2();
-  String arg3();
-  Niveau niveau() default Niveau.DEBUTANT;
- 
-}
-
-
 
 
 - [x] on both
